@@ -139,7 +139,9 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && isMouseButtonPressed == false)
         {
+            isMouseButtonPressed = true;
             selectedCase = GetSelectCase();
+            selectedCase.GetComponent<Case>().selectedSprite.SetActive(true);
             //print("Current case : " + currentCase.GetComponent<Case>().index);
             initialMousePosition = Input.mousePosition;
 
@@ -152,6 +154,8 @@ public class GameManager : MonoBehaviour
             lastMousePosition = Input.mousePosition;
 
             MoveCase();
+
+            selectedCase.GetComponent<Case>().selectedSprite.SetActive(false);
         }
     }
 
@@ -215,10 +219,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Wrong Movement");
+            Debug.LogWarning("Wrong / No Movement");
+            return;
         }
 
-        PuzzleManager.Instance.SwitchCase(selectedCase, emptyCase);
+        if (emptyCase != null)
+        {
+            PuzzleManager.Instance.SwitchCase(selectedCase, emptyCase);
+        }
     }
 
     /// <summary>

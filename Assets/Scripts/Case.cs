@@ -11,6 +11,8 @@ public class Case : MonoBehaviour
     public int index;
     public bool isEmptyCase;
 
+    public GameObject selectedSprite;
+
     //Use to better locate and manipulate the object in the grid
     public Vector2Int coordinate;
 
