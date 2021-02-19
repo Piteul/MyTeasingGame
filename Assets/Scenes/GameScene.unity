@@ -1402,7 +1402,7 @@ MonoBehaviour:
   maxRowAndColumn: 0
   emptyCase: {fileID: 398704255}
   defaultEmptyCaseCoordinate: {x: 1, y: 1}
-  NumberOfInitPermutation: 3
+  NumberOfInitPermutation: 100
 --- !u!1 &1489667555 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7567760769184698924, guid: 9813ae124bc3b204dba3ff9fc51c54f3,

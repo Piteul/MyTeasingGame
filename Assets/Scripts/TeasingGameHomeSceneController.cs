@@ -31,12 +31,6 @@ namespace TeasingGame
             }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public void GoToGameScene()
         {
             SceneManager.LoadScene(1);
@@ -45,7 +39,6 @@ namespace TeasingGame
         void LoadPlayerInfo()
         {
             bestPlayerScore = PlayerPrefs.HasKey("BestPlayerScore") ? PlayerPrefs.GetFloat("BestPlayerScore") : 0;
-            print("BPS" + bestPlayerScore);
         }
-    }
+    }   
 }

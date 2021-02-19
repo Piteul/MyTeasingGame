@@ -4,11 +4,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// GameManager
+/// in this project I mainly use it for movements and secondary systems
+/// Promise I will not do all my code here
+/// </summary>
 public class GameManager : MonoBehaviour
 {
 
     bool isEndGame = false;
 
+    [Header("UI Elements")]
     public GameObject endGamePanel;
     public Text timerText;
     public Text bestScoreText;
@@ -24,6 +30,7 @@ public class GameManager : MonoBehaviour
     Vector3 lastMousePosition;
     bool isMouseButtonPressed;
 
+    //Refer to the selected case that the player want to move
     GameObject selectedCase;
 
     public enum Platform
@@ -37,6 +44,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         LoadPlayerInfo();
+        SelectPlatform();
 
         isEndGame = false;
         endGamePanel.SetActive(false);
@@ -58,6 +66,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Use to know which sprites use for the grid
+    /// </summary>
+    void SelectPlatform()
+    {
+#if UNITY_EDITOR
+        platform = Platform.Android;
+#elif UNITY_IOS
+        platform = Platform.Apple;
+#elif UNITY_ANDROID
+        platform = Platform.Android;
+#endif
+    }
+
     void TimerHandler()
     {
         currentTimerGame -= Time.fixedDeltaTime;
@@ -77,7 +99,7 @@ public class GameManager : MonoBehaviour
 
     public void SetVictory()
     {
-        print("Victory");
+        //print("Victory");
         isEndGame = true;
         endGameTitleText.text = "Victory!";
         endGameTimerText.text = timerText.text;
@@ -88,7 +110,7 @@ public class GameManager : MonoBehaviour
 
     public void SetGameOver()
     {
-        print("GameOver");
+        //print("GameOver");
         isEndGame = true;
         endGameTitleText.text = "Game Over!";
         endGameTimerText.text = "00:00";
@@ -106,10 +128,6 @@ public class GameManager : MonoBehaviour
     {
         bestPlayerScore = currentTimerGame;
         PlayerPrefs.SetFloat("BestPlayerScore", bestPlayerScore);
-
-        print("CT :" + currentTimerGame);
-        print(PlayerPrefs.GetFloat("BestPlayerScore"));
-
         PlayerPrefs.Save();
     }
 
@@ -128,17 +146,18 @@ public class GameManager : MonoBehaviour
 
         }
 
-
         if (Input.GetMouseButtonUp(0))
         {
             isMouseButtonPressed = false;
             lastMousePosition = Input.mousePosition;
 
             MoveCase();
-
         }
     }
 
+    /// <summary>
+    /// Check player's movement direction to handle case move
+    /// </summary>
     void MoveCase()
     {
         if (selectedCase == null)
@@ -202,6 +221,10 @@ public class GameManager : MonoBehaviour
         PuzzleManager.Instance.SwitchCase(selectedCase, emptyCase);
     }
 
+    /// <summary>
+    /// Find on which case the player clicked
+    /// </summary>
+    /// <returns></returns>
     GameObject GetSelectCase()
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);

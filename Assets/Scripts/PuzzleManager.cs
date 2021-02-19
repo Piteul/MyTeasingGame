@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class PuzzleManager : MonoBehaviour
 {
-
+    [Header("Game / UI Elements")]
     public GameObject[] cases;
-
     public Sprite[] androidSprite;
     public Sprite[] appleSprite;
 
     public GameObject[,] puzzleGrid;
-
+    
     float squareLength = 0;
     int intSquareLength;
     public int maxRowAndColumn = 0;
@@ -32,24 +31,18 @@ public class PuzzleManager : MonoBehaviour
         InitGrid();
         RandomizeGrid();
         isGridInitialisation = false;
-
-
     }
 
-
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    /// <summary>
+    /// Analyze the number of case to know if we can form a square matrix (for the sake of modularity..)
+    /// Filling of the matrix, in order to more easily operate afterwards
+    /// Here the Matrix is nicknamed Grid
+    /// </summary>
     public void InitGrid()
     {
         squareLength = Mathf.Sqrt(cases.Length);
         intSquareLength = Mathf.RoundToInt(squareLength);
         int index = 0;
-
 
         if (squareLength == intSquareLength)
         {
@@ -93,7 +86,10 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// My trivial Randomize Init, less expensive than that of Wikipedia
+    /// I start from a solved grid, to then gradually deconstruct it
+    /// </summary>
     private void RandomizeGrid()
     {
         Direction direction;
@@ -129,6 +125,11 @@ public class PuzzleManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Switch two cases, logically a real and an empty one
+    /// </summary>
+    /// <param name="selectedCase"></param>
+    /// <param name="emptyCase"></param>
     public void SwitchCase(GameObject selectedCase, GameObject emptyCase)
     {
         Vector2Int caseCoodinate = selectedCase.GetComponent<Case>().coordinate;
@@ -167,6 +168,10 @@ public class PuzzleManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Check if the cases are all in their right place, with the index
+    /// </summary>
+    /// <returns></returns>
     public bool CheckResolution()
     {
         int index = 0;
