@@ -7,6 +7,8 @@ public class Case : MonoBehaviour
     public int index;
     public bool isEmptyCase;
 
+    public Vector2Int coordinate;
+
     // Start is called before the first frame update
     void Start()
     {

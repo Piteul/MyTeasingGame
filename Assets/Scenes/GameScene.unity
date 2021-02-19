@@ -148,8 +148,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1454129350}
   - {fileID: 327962897}
+  - {fileID: 1454129350}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -293,7 +293,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 26145036}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &327962898
 MonoBehaviour:
@@ -986,7 +986,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 26145036}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1454129351
 MonoBehaviour:
@@ -1030,6 +1030,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8b894ff9aa5e14c4ab100b57e9b75d76, type: 3}
   - {fileID: 21300000, guid: 782df7ad91d32439e80313d4db69e308, type: 3}
   - {fileID: 21300000, guid: 426013ddfcc3c43d0a966daa201f12f2, type: 3}
+  maxRowAndColumn: 0
+  defaultEmptyCaseCoordinate: {x: 1, y: 1}
 --- !u!1 &1489667555 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7567760769184698924, guid: 9813ae124bc3b204dba3ff9fc51c54f3,
@@ -1517,6 +1519,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1876821260}
     m_Modifications:
+    - target: {fileID: 2234536944365895452, guid: 9813ae124bc3b204dba3ff9fc51c54f3,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2496487280893100340, guid: 9813ae124bc3b204dba3ff9fc51c54f3,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fef1c957e48ee451db51d6f5d3af180d,
+        type: 3}
     - target: {fileID: 4372101915671552651, guid: 9813ae124bc3b204dba3ff9fc51c54f3,
         type: 3}
       propertyPath: m_Pivot.x

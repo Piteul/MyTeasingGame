@@ -14,7 +14,8 @@ public class PuzzleManager : MonoBehaviour
 
     float squareLength = 0;
     int intSquareLength;
-
+    public int maxRowAndColumn = 0;
+    public Vector2Int defaultEmptyCaseCoordinate;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,7 +43,9 @@ public class PuzzleManager : MonoBehaviour
 
         if (squareLength == intSquareLength)
         {
+
             puzzleGrid = new GameObject[intSquareLength, intSquareLength];
+            maxRowAndColumn = intSquareLength - 1;
 
             for (int i = 0; i < squareLength; i++)
             {
@@ -54,6 +57,7 @@ public class PuzzleManager : MonoBehaviour
                     puzzleGrid[i, j] = cases[index];
 
                     puzzleGrid[i, j].GetComponent<Case>().index = index;
+                    puzzleGrid[i, j].GetComponent<Case>().coordinate = new Vector2Int(i, j);
 
                     switch (GameManager.Instance.platform)
                     {
@@ -102,7 +106,6 @@ public class PuzzleManager : MonoBehaviour
         }
         return false;
     }
-
 
     #region Singleton
 
