@@ -29,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 6172963760491026425}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 40, y: 40, z: 40}
+  m_LocalScale: {x: 60, y: 60, z: 60}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   isEmptyCase: 0
+  coordinate: {x: 0, y: 0}
 --- !u!223 &9010439135837271986
 Canvas:
   m_ObjectHideFlags: 0
