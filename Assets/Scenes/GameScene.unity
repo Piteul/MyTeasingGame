@@ -312,7 +312,7 @@ MonoBehaviour:
   bestScoreText: {fileID: 2083627121}
   endGameTitleText: {fileID: 1309589356}
   endGameTimerText: {fileID: 549018990}
-  timeTotal: 30
+  timeTotal: 180
   currentTimerGame: 0
   platform: 0
 --- !u!1 &398704255 stripped
@@ -1400,7 +1400,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 782df7ad91d32439e80313d4db69e308, type: 3}
   - {fileID: 21300000, guid: 426013ddfcc3c43d0a966daa201f12f2, type: 3}
   maxRowAndColumn: 0
+  emptyCase: {fileID: 398704255}
   defaultEmptyCaseCoordinate: {x: 1, y: 1}
+  NumberOfInitPermutation: 3
 --- !u!1 &1489667555 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7567760769184698924, guid: 9813ae124bc3b204dba3ff9fc51c54f3,
@@ -1857,7 +1859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2023444063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1871,6 +1873,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SceneForButton: 1
+  bestPlayerScoreText: {fileID: 0}
+  bestPlayerScore: 0
 --- !u!4 &2023444064
 Transform:
   m_ObjectHideFlags: 0
@@ -1954,7 +1958,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 01:00
+  m_Text: 00:00
 --- !u!222 &2083627122
 CanvasRenderer:
   m_ObjectHideFlags: 0

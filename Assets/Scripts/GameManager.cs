@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 
     public float timeTotal = 180f;
     public float currentTimerGame;
+    float bestPlayerScore;
 
     Vector3 initialMousePosition;
     Vector3 actualMousePosition;
@@ -25,21 +26,23 @@ public class GameManager : MonoBehaviour
 
     GameObject selectedCase;
 
-
-
-
     public enum Platform
     {
         Android,
         Apple
     }
-
     public Platform platform;
+
+
     void Start()
     {
+        LoadPlayerInfo();
+
         isEndGame = false;
         endGamePanel.SetActive(false);
         currentTimerGame = timeTotal;
+        bestScoreText.text = (int)(bestPlayerScore / 60) + ":" +
+                         ((int)(((bestPlayerScore % 60) < 0) ? 0 : (bestPlayerScore % 60))).ToString("00");
     }
 
     private void Update()
@@ -51,7 +54,7 @@ public class GameManager : MonoBehaviour
     {
         if (!isEndGame)
         {
-        TimerHandler();
+            TimerHandler();
         }
     }
 
@@ -80,6 +83,7 @@ public class GameManager : MonoBehaviour
         endGameTimerText.text = timerText.text;
 
         endGamePanel.SetActive(true);
+        SavePlayerInfo();
     }
 
     public void SetGameOver()
@@ -92,6 +96,27 @@ public class GameManager : MonoBehaviour
         endGamePanel.SetActive(true);
     }
 
+    #region Save/Load System
+    void LoadPlayerInfo()
+    {
+        bestPlayerScore = PlayerPrefs.HasKey("BestPlayerScore") ? PlayerPrefs.GetFloat("BestPlayerScore") : 0f;
+    }
+
+    public void SavePlayerInfo()
+    {
+        bestPlayerScore = currentTimerGame;
+        PlayerPrefs.SetFloat("BestPlayerScore", bestPlayerScore);
+
+        print("CT :" + currentTimerGame);
+        print(PlayerPrefs.GetFloat("BestPlayerScore"));
+
+        PlayerPrefs.Save();
+    }
+
+    #endregion
+
+
+    #region Input / Movement
     void InputManager()
     {
         if (Input.GetMouseButtonDown(0) && isMouseButtonPressed == false)
@@ -128,19 +153,17 @@ public class GameManager : MonoBehaviour
         float dotResultUp = Vector2.Dot(direction, Vector2.up);
         float dotResultRight = Vector2.Dot(direction, Vector2.right);
 
-        Vector2Int caseCoodinate = selectedCase.GetComponent<Case>().coordinate;
+        Vector2Int caseCoordinate = selectedCase.GetComponent<Case>().coordinate;
         GameObject emptyCase = null;
-        Vector2Int emptyCaseCoodinate;
-
 
         //Move Up
         if (dotResultUp > 0.7f)
         {
             //print("MoveUp");
 
-            if (caseCoodinate.x > 0)
+            if (caseCoordinate.x > 0)
             {
-                emptyCase = PuzzleManager.Instance.puzzleGrid[caseCoodinate.x - 1, caseCoodinate.y];
+                emptyCase = PuzzleManager.Instance.puzzleGrid[caseCoordinate.x - 1, caseCoordinate.y];
             }
         }
         //Move Down
@@ -148,27 +171,27 @@ public class GameManager : MonoBehaviour
         {
             //print("MoveDown");
 
-            if (caseCoodinate.x < PuzzleManager.Instance.maxRowAndColumn)
+            if (caseCoordinate.x < PuzzleManager.Instance.maxRowAndColumn)
             {
-                emptyCase = PuzzleManager.Instance.puzzleGrid[caseCoodinate.x + 1, caseCoodinate.y];
+                emptyCase = PuzzleManager.Instance.puzzleGrid[caseCoordinate.x + 1, caseCoordinate.y];
             }
         }
         //Move Right
         else if (dotResultRight > 0.7f)
         {
             //print("MoveRight");
-            if (caseCoodinate.y < PuzzleManager.Instance.maxRowAndColumn)
+            if (caseCoordinate.y < PuzzleManager.Instance.maxRowAndColumn)
             {
-                emptyCase = PuzzleManager.Instance.puzzleGrid[caseCoodinate.x , caseCoodinate.y + 1];
+                emptyCase = PuzzleManager.Instance.puzzleGrid[caseCoordinate.x, caseCoordinate.y + 1];
             }
         }
         //Move Left
         else if (dotResultRight < -0.7f)
         {
             //print("MoveLeft");
-            if (caseCoodinate.y > 0)
+            if (caseCoordinate.y > 0)
             {
-                emptyCase = PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y - 1];
+                emptyCase = PuzzleManager.Instance.puzzleGrid[caseCoordinate.x, caseCoordinate.y - 1];
             }
         }
         else
@@ -176,34 +199,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Wrong Movement");
         }
 
-        emptyCaseCoodinate = emptyCase.GetComponent<Case>().coordinate;
-
-        if (emptyCase.GetComponent<Case>().isEmptyCase)
-        {
-            //Temporarily saves the position of the case to be moved
-            Vector3 tempLocalPos = PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y].GetComponent<RectTransform>().anchoredPosition;
-
-            //Switch reference in puzzle grid
-            PuzzleManager.Instance.puzzleGrid[emptyCaseCoodinate.x, emptyCaseCoodinate.y] = selectedCase;
-            PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y] = emptyCase;
-            
-            //Update coordinate in each case
-            emptyCase.GetComponent<Case>().coordinate = caseCoodinate;
-            selectedCase.GetComponent<Case>().coordinate = emptyCaseCoodinate;
-
-            //Switch position on screen
-            selectedCase.GetComponent<RectTransform>().anchoredPosition = emptyCase.GetComponent<RectTransform>().anchoredPosition;
-            emptyCase.GetComponent<RectTransform>().anchoredPosition = tempLocalPos;
-
-            //We don't update index of each case, because this initial index is use to check the puzzle resolution
-            if(emptyCase.GetComponent<Case>().coordinate == PuzzleManager.Instance.defaultEmptyCaseCoordinate)
-            {
-                if (PuzzleManager.Instance.CheckResolution())
-                {
-                    SetVictory();
-                }
-            }
-        }
+        PuzzleManager.Instance.SwitchCase(selectedCase, emptyCase);
     }
 
     GameObject GetSelectCase()
@@ -222,6 +218,7 @@ public class GameManager : MonoBehaviour
 
         return null;
     }
+    #endregion
 
 
     #region Singleton
