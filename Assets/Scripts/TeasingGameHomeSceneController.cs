@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using SceneTransitionSystem;
+//using SceneTransitionSystem;
 
 
 namespace TeasingGame
@@ -29,7 +29,7 @@ public class TeasingGameHomeSceneController : MonoBehaviour
 
    public void GoToGameScene()
     {
-        STSSceneManager.LoadScene(SceneForButton.ToString());
+        //STSSceneManager.LoadScene(SceneForButton.ToString());
     }
 }
 }
