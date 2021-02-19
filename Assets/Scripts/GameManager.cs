@@ -6,8 +6,14 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+    bool isEndGame = false;
+
+    public GameObject endGamePanel;
     public Text timerText;
     public Text bestScoreText;
+    public Text endGameTitleText;
+    public Text endGameTimerText;
 
     public float timeTotal = 180f;
     public float currentTimerGame;
@@ -31,6 +37,8 @@ public class GameManager : MonoBehaviour
     public Platform platform;
     void Start()
     {
+        isEndGame = false;
+        endGamePanel.SetActive(false);
         currentTimerGame = timeTotal;
     }
 
@@ -41,7 +49,10 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!isEndGame)
+        {
         TimerHandler();
+        }
     }
 
     void TimerHandler()
@@ -64,12 +75,21 @@ public class GameManager : MonoBehaviour
     public void SetVictory()
     {
         print("Victory");
+        isEndGame = true;
+        endGameTitleText.text = "Victory!";
+        endGameTimerText.text = timerText.text;
 
+        endGamePanel.SetActive(true);
     }
 
     public void SetGameOver()
     {
         print("GameOver");
+        isEndGame = true;
+        endGameTitleText.text = "Game Over!";
+        endGameTimerText.text = "00:00";
+
+        endGamePanel.SetActive(true);
     }
 
     void InputManager()
@@ -166,19 +186,23 @@ public class GameManager : MonoBehaviour
             //Switch reference in puzzle grid
             PuzzleManager.Instance.puzzleGrid[emptyCaseCoodinate.x, emptyCaseCoodinate.y] = selectedCase;
             PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y] = emptyCase;
-
-
+            
             //Update coordinate in each case
-            PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y].GetComponent<Case>().coordinate = caseCoodinate;
-            PuzzleManager.Instance.puzzleGrid[emptyCaseCoodinate.x, emptyCaseCoodinate.y].GetComponent<Case>().coordinate = emptyCaseCoodinate;
+            emptyCase.GetComponent<Case>().coordinate = caseCoodinate;
+            selectedCase.GetComponent<Case>().coordinate = emptyCaseCoodinate;
 
             //Switch position on screen
-            PuzzleManager.Instance.puzzleGrid[emptyCaseCoodinate.x, emptyCaseCoodinate.y].GetComponent<RectTransform>().anchoredPosition = PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y].GetComponent<RectTransform>().anchoredPosition;
-            PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y].GetComponent<RectTransform>().anchoredPosition = tempLocalPos;
+            selectedCase.GetComponent<RectTransform>().anchoredPosition = emptyCase.GetComponent<RectTransform>().anchoredPosition;
+            emptyCase.GetComponent<RectTransform>().anchoredPosition = tempLocalPos;
 
             //We don't update index of each case, because this initial index is use to check the puzzle resolution
-
-
+            if(emptyCase.GetComponent<Case>().coordinate == PuzzleManager.Instance.defaultEmptyCaseCoordinate)
+            {
+                if (PuzzleManager.Instance.CheckResolution())
+                {
+                    SetVictory();
+                }
+            }
         }
     }
 

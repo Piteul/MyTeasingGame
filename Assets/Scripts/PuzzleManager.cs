@@ -21,11 +21,6 @@ public class PuzzleManager : MonoBehaviour
     {
         InitGrid();
 
-        if (CheckResolution())
-        {
-
-        }
-        //print(test);
     }
 
     // Update is called once per frame
@@ -83,28 +78,62 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
+    public void SwitchCase(Case selectedCase, Case emptyCase)
+    {
+        Vector2Int caseCoodinate = selectedCase.GetComponent<Case>().coordinate;
+        Vector2Int emptyCaseCoodinate = emptyCase.GetComponent<Case>().coordinate;
+
+        if (emptyCase.GetComponent<Case>().isEmptyCase)
+        {
+            //Temporarily saves the position of the case to be moved
+            Vector3 tempLocalPos = PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y].GetComponent<RectTransform>().anchoredPosition;
+
+            //Switch reference in puzzle grid
+            PuzzleManager.Instance.puzzleGrid[emptyCaseCoodinate.x, emptyCaseCoodinate.y] = selectedCase;
+            PuzzleManager.Instance.puzzleGrid[caseCoodinate.x, caseCoodinate.y] = emptyCase;
+
+            //Update coordinate in each case
+            emptyCase.GetComponent<Case>().coordinate = caseCoodinate;
+            selectedCase.GetComponent<Case>().coordinate = emptyCaseCoodinate;
+
+            //Switch position on screen
+            selectedCase.GetComponent<RectTransform>().anchoredPosition = emptyCase.GetComponent<RectTransform>().anchoredPosition;
+            emptyCase.GetComponent<RectTransform>().anchoredPosition = tempLocalPos;
+
+            //We don't update index of each case, because this initial index is use to check the puzzle resolution
+            if (emptyCase.GetComponent<Case>().coordinate == PuzzleManager.Instance.defaultEmptyCaseCoordinate)
+            {
+                if (PuzzleManager.Instance.CheckResolution())
+                {
+                    SetVictory();
+                }
+            }
+        }
+
+    }
+
     public bool CheckResolution()
     {
         int index = 0;
-        if (puzzleGrid[1, 1].GetComponent<Case>().isEmptyCase)
-        {
-            for (int i = 0; i < squareLength; i++)
-            {
-                for (int j = 0; j < squareLength; j++)
-                {
-                    index = (int)(i * squareLength) + j;
 
-                    if (puzzleGrid[i, j].GetComponent<Case>().index != index)
-                    {
-                        return false;
-                    }
+        for (int i = 0; i < squareLength; i++)
+        {
+            for (int j = 0; j < squareLength; j++)
+            {
+                index = (int)(i * squareLength) + j;
+
+
+                if (puzzleGrid[i, j].GetComponent<Case>().index != index)
+                {
+                    return false;
                 }
 
+                //print("Index : " + index + ", Case Index : " + puzzleGrid[i, j].GetComponent<Case>().index);
             }
 
-            return true;
         }
-        return false;
+
+        return true;
     }
 
     #region Singleton
